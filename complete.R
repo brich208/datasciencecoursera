@@ -9,17 +9,20 @@ complete <- function(directory, id = 1:332) {
 	#read a specified CSV into file
     data <- read.csv(files[i])
     
-    #create a data frame of only pollutant data
-    data_s <- data[, "sulfate"]
-    data_n <- data[, "nitrate"]
-    data_all <- data.frame(data_s, data_n) 
+    #create a data frame of only complete cases
+    com_cases <- complete.cases(data)
+    data <- data[com_cases, ] 
+    #data_s <- data[, "sulfate"]
+    #data_n <- data[, "nitrate"]
+    #data_all <- data.frame(data_s, data_n) 
       
     #analyze frame to fine pairs of observations  
-    analysis_frame <- data.frame(data_all, bothObs = (data_all$data_s > data_all$data_n))
+    #analysis_frame <- data.frame(data_all, bothObs = (data_all$data_s > data_all$data_n))
     
     #count the number of results that have complete observations
-    count_vec <- analysis_frame[, "bothObs"]
-    count <- sum(length(which(!is.na(count_vec))))
+    #count_vec <- analysis_frame[, "bothObs"]
+    #count <- sum(length(which(!is.na(count_vec))))
+    count <- nrow(data)
     
     #add the current record ID and its count to the vectors
     id_vec <- append(id_vec, i)
