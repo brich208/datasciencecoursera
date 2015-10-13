@@ -1,6 +1,6 @@
 complete <- function(directory, id = 1:332) {
   #create files list and black data frame and vectors
-  files <- list.files("specdata", full.names = TRUE)
+  files <- list.files(directory, full.names = TRUE)
   data <- data.frame()
   id_vec<- numeric()
   nobs_vec <- numeric()
