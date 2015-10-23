@@ -9,12 +9,8 @@ corr <- function (directory, threshold = 0) {
     #create data frame for i instance
     data <- read.csv(files[i])
     
-    #create data frame of just complete cases
-    com_cases <- complete.cases(data)
-    data_clean <- data[com_cases, ] 
-    
-    #count the number of rows in the complete data frame
-    count <- nrow(data_clean)
+    #count the number of complete rows in the data frame
+    count <- nrow(data[complete.cases(data), ])
     
     #if the no. of complete cases is more than threshold compute cor() on file
     if(count > threshold) {
