@@ -16,23 +16,39 @@ rankall <- function(outcome, num = "best") {
     23
   }
   
-  ##check that the state input is a valid input
-  
-  all_states <- unique(x[,"State"])
-  if(!(state %in% all_states)){
-    stop("invalid state")
+  if(!(num > 0)) {
+    stop("invalid number")
   }
+  
+  ##check that the state input is a valid input
+  #all_states <- unique(x[,"State"])
+  #if(!(state %in% all_states)){
+    #stop("invalid state")
+  #}
   
   x <- x[ , c(2, 7, oc)]
   x <- na.omit(x)
   names(x) <- c("hospital", "state", "outcome")
-  x <- x[order(x$state, x$outcome, x$hospital) , ]
   
-  if(num=="best") {x <- x[1, ]}
-  else if(num=="worst") {x <- tail(x, n =1)}
-  else{x <- x[num, ]}
+  if(num=="best") {
+    num <- 1
+    x <- x[order(x$state, x$outcome, x$hospital) , ]
+  }
+  else if(num=="worst") {
+    num <- 1
+    x <- x[order(x$state, -x$outcome, x$hospital) , ]
+  }
+  else{
+    num <- num
+    x <- x[order(x$state, x$outcome, x$hospital) , ]
+  }
   
-  x <- x[, "hospital"]
+  s <- split(x, x$state)
+  s <- lapply(s, function(y) y[num, ])
+  s <- do.call(rbind.data.frame, s)
+  keep <- c("hospital", "state")
+  s <- s[keep]
   
-  x
+  s
+
 }
