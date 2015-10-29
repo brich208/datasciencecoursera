@@ -6,10 +6,10 @@ rankall <- function(outcome, num = "best") {
   if(!(outcome %in% all_outcomes)) {
     stop("invalid outcome")
   }
-  oc <- if(outcome=="heart attack") {
+  oc <- if(outcome==all_outcomes[1]) {
     11
   }
-  else if(outcome=="heart failure") {
+  else if(outcome==all_outcomes[2]) {
     17
   }
   else {
@@ -26,8 +26,7 @@ rankall <- function(outcome, num = "best") {
     #stop("invalid state")
   #}
   
-  x <- x[ , c(2, 7, oc)]
-  x <- na.omit(x)
+  x <- na.omit(x[ , c(2, 7, oc)])
   names(x) <- c("hospital", "state", "outcome")
   
   if(num=="best") {
@@ -43,11 +42,9 @@ rankall <- function(outcome, num = "best") {
     x <- x[order(x$state, x$outcome, x$hospital) , ]
   }
   
-  s <- split(x, x$state)
-  s <- lapply(s, function(y) y[num, ])
-  s <- do.call(rbind.data.frame, s)
-  keep <- c("hospital", "state")
-  s <- s[keep]
+  s <- do.call(rbind.data.frame, 
+               lapply(split(x, x$state), function(y) y[num, ]))
+  s <- s[c("hospital", "state")]
   
   s
 
