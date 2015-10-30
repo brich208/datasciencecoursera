@@ -1,7 +1,5 @@
 rankall <- function(outcome, num = "best") {
-  x <- read.csv("outcome-of-care-measures.csv",  
-                na.strings="Not Available", stringsAsFactors = FALSE)
-  
+    
   all_outcomes <- c("heart attack", "heart failure", "pneumonia")
   if(!(outcome %in% all_outcomes)) {
     stop("invalid outcome")
@@ -20,11 +18,8 @@ rankall <- function(outcome, num = "best") {
     stop("invalid number")
   }
   
-  ##check that the state input is a valid input
-  #all_states <- unique(x[,"State"])
-  #if(!(state %in% all_states)){
-    #stop("invalid state")
-  #}
+  x <- read.csv("outcome-of-care-measures.csv",  
+                na.strings="Not Available", stringsAsFactors = FALSE)
   
   x <- na.omit(x[ , c(2, 7, oc)])
   names(x) <- c("hospital", "state", "outcome")
@@ -38,12 +33,12 @@ rankall <- function(outcome, num = "best") {
     x <- x[order(x$state, -x$outcome, x$hospital) , ]
   }
   else{
-    num <- num
     x <- x[order(x$state, x$outcome, x$hospital) , ]
   }
   
-  s <- do.call(rbind.data.frame, 
-               lapply(split(x, x$state), function(y) y[num, ]))
+  s <- split(x, x$state)
+  s <- lapply(s, function(y) y[num, ])
+  s <- do.call(rbind.data.frame, s)
   s <- s[c("hospital", "state")]
   
   s
