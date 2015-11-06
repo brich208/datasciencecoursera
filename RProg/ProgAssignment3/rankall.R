@@ -53,6 +53,6 @@ rankall <- function(outcome, num = "best") {
   s <- do.call(rbind.data.frame, s)
   s <- s[c("hospital", "state")]
   
-  s
+  s 
 
 }
